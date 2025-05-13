@@ -13,13 +13,15 @@ class AlienInvasion:
         pygame.init()
 
         self.settings = Settings()
-        # self.screen = pygame.display.set_mode(
-        #     (self.settings.screen_width, self.settings.screen_height)
-        # )
+        # Сделать экран размером который задан в настройках
+        self.screen = pygame.display.set_mode(
+            (self.settings.screen_width,
+             self.settings.screen_height))
         #сделать игру на весь экран
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         # self.settings.screen_width = self.screen.get_rect().width
         # self.settings.screen_height = self.screen.get_rect().height
+
         pygame.display.set_caption("Alien Invasion/ Q = exit")
         self.ship = Ship(self)
         self.alien = Alien(self)
