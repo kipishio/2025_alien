@@ -38,8 +38,13 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self.bullets.update()
-            self._update_screen()
 
+            # Удаление снарядов, вышедших за край экрана.
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom <= 0:
+                    self.bullets.remove(bullet)
+
+            self._update_screen()
 
     def _check_events(self):
         """Обрабатывает нажатия клавиш и события мыши."""
@@ -89,7 +94,6 @@ class AlienInvasion:
 
         # Отображение последнего прорисованного экрана.
         pygame.display.flip()
-
 
 
 if __name__ == '__main__':
