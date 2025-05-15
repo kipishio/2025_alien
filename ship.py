@@ -43,4 +43,5 @@ class Ship:
     def blitme(self):
         """Рисует корабль в текущей позиции."""
 
+        # устанавливаем картинку в позицию как у прямоугольника rect
         self.screen.blit(self.image, self.rect)

@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from alien import Alien
+from bullet import Bullet
 
 
 class AlienInvasion:
@@ -10,6 +11,9 @@ class AlienInvasion:
 
     def __init__(self):
         """Инициализирует игру и создает игровые ресурсы."""
+
+        # инициализации всех необходимых модулей Pygame, чтобы начать
+        # работу с графикой, звуком и другими возможностями библиотеки.
         pygame.init()
 
         self.settings = Settings()
@@ -17,7 +21,7 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width,
              self.settings.screen_height))
-        #сделать игру на весь экран
+        # сделать игру на весь экран
         # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         # self.settings.screen_width = self.screen.get_rect().width
         # self.settings.screen_height = self.screen.get_rect().height
@@ -26,12 +30,16 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.alien = Alien(self)
 
+        self.bullets = pygame.sprite.Group()
+
     def run_game(self):
         """Запуск основного цикла игры."""
         while True:
             self._check_events()
             self.ship.update()
+            self.bullets.update()
             self._update_screen()
+
 
     def _check_events(self):
         """Обрабатывает нажатия клавиш и события мыши."""
@@ -52,8 +60,13 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
 
-
+    def _fire_bullet(self):
+        """Создание нового снаряда и включение его в группу bullets."""
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
 
     def _check_keyup_events(self, event):
         """Реагирует на отпускание клавиш."""
@@ -64,13 +77,19 @@ class AlienInvasion:
 
     def _update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""
+        # обновляем заливку экрана
         self.screen.fill(self.settings.bg_color)
         # рисуем корабль на экране
         self.ship.blitme()
         # рисуем инопланетян на экране
         self.alien.blitme()
+        # перебираем ирисуем группу пуль
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
+
         # Отображение последнего прорисованного экрана.
         pygame.display.flip()
+
 
 
 if __name__ == '__main__':
