@@ -37,13 +37,7 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
-            self.bullets.update()
-
-            # Удаление снарядов, вышедших за край экрана.
-            for bullet in self.bullets.copy():
-                if bullet.rect.bottom <= 0:
-                    self.bullets.remove(bullet)
-
+            self._update_bullets()
             self._update_screen()
 
     def _check_events(self):
@@ -70,8 +64,9 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _check_keyup_events(self, event):
         """Реагирует на отпускание клавиш."""
@@ -79,6 +74,17 @@ class AlienInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
+
+    def _update_bullets(self):
+        """Обновляет позиции снарядов и уничтожает старые снаряды."""
+        # Обновление позиций снарядов.
+        self.bullets.update()
+
+        # Удаление снарядов, вышедших за край экрана.
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
 
     def _update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""
@@ -88,7 +94,7 @@ class AlienInvasion:
         self.ship.blitme()
         # рисуем инопланетян на экране
         self.alien.blitme()
-        # перебираем ирисуем группу пуль
+        # перебираем и рисуем группу пуль
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
 
