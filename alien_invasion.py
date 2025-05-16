@@ -1,9 +1,11 @@
 import sys
+
+import _crypt
 import pygame
 from settings import Settings
 from ship import Ship
-from alien import Alien
 from bullet import Bullet
+from alien import Alien
 
 
 class AlienInvasion:
@@ -28,9 +30,10 @@ class AlienInvasion:
 
         pygame.display.set_caption("Alien Invasion/ Q = exit")
         self.ship = Ship(self)
-        self.alien = Alien(self)
-
         self.bullets = pygame.sprite.Group()
+
+        self.aliens = pygame.sprite.Group()
+        self._create_fleet()
 
     def run_game(self):
         """Запуск основного цикла игры."""
@@ -85,6 +88,27 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
+    def _create_fleet(self):
+        """Создает флот пришельцев."""
+        # Создание пришельца и вычисление количества пришельцев в ряду
+        # Интервал между соседними пришельцами равен ширине пришельца.
+        alien = Alien(self)
+        alien_width = alien.rect.width
+        available_space_x = self.settings.screen_width - (2 * alien_width)
+        number_aliens_x = available_space_x // (2 * alien_width)
+
+        # Создание первого ряда пришельцев.
+        for alien_number in range(number_aliens_x):
+            self._create_alien(alien_number)
+
+    def  _create_alien(self, alien_number):
+        # Создание пришельца и размещение его в ряду.
+        alien = Alien(self)
+        alien_width = alien.rect.width
+        alien = Alien(self)
+        alien.x = alien_width + 2 * alien_width * alien_number
+        alien.rect.x = alien.x
+        self.aliens.add(alien)
 
     def _update_screen(self):
         """Обновляет изображения на экране и отображает новый экран."""
@@ -92,11 +116,13 @@ class AlienInvasion:
         self.screen.fill(self.settings.bg_color)
         # рисуем корабль на экране
         self.ship.blitme()
-        # рисуем инопланетян на экране
-        self.alien.blitme()
+
         # перебираем и рисуем группу пуль
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+
+        # Рисуем весь флот
+        self.aliens.draw(self.screen)
 
         # Отображение последнего прорисованного экрана.
         pygame.display.flip()

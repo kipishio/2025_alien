@@ -1,23 +1,30 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Alien:
-    """Класс для управления кораблем."""
+class Alien(Sprite):
+    """Класс, представляющий одного пришельца."""
 
     def __init__(self, ai_game):
-        """Инициализирует корабль и задает его начальную позицию."""
+        """Инициализирует пришельца и задает его начальную позицию."""
+        super().__init__()
         # Сохраняет экран игры в атрибут self.screen.
         self.screen = ai_game.screen
-        # загружаем размер экрана
-        self.screen_rect = ai_game.screen.get_rect()
-        # Загружает изображение корабля
+
+        # Загрузка изображения пришельца и назначение атрибута rect.
         self.image = pygame.image.load('images/alien.bmp')
+
         # Получает прямоугольник изображения корабля и
         # содержит координаты и размеры картинки
         self.rect = self.image.get_rect()
-        # Устанавливает начальную позицию корабля, выравнивая его
-        # верх середина (midtop)
-        self.rect.midtop = self.screen_rect.midtop
+
+        # Каждый новый пришелец появляется в левом верхнем углу экрана.
+        # с отступом по ширине и высоте картинки
+        self.rect.x = self.rect.width
+        self.rect.y = self.rect.height
+
+        # Сохранение точной горизонтальной позиции пришельца.
+        self.x = float(self.rect.x)
 
     def blitme(self):
         """Рисует корабль в текущей позиции."""
