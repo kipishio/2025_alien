@@ -17,3 +17,6 @@ class Settings:
         self.bullet_color = (60, 60, 60)
         # Максимальное количество снарядов
         self.bullets_allowed = 3
+
+        #Скорость движения пришельцев
+        self.alien_speed = 1.0

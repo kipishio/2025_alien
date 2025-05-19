@@ -10,6 +10,8 @@ class Alien(Sprite):
         super().__init__()
         # Сохраняет экран игры в атрибут self.screen.
         self.screen = ai_game.screen
+        # настройки игры
+        self.settings = ai_game.settings
 
         # Загрузка изображения пришельца и назначение атрибута rect.
         self.image = pygame.image.load('images/alien.bmp')
@@ -26,7 +28,13 @@ class Alien(Sprite):
         # Сохранение точной горизонтальной позиции пришельца.
         self.x = float(self.rect.x)
 
+
     def blitme(self):
         """Рисует корабль в текущей позиции."""
 
         self.screen.blit(self.image, self.rect)
+
+    def update(self):
+        """Перемещает пришельца вправо."""
+        self.x += self.settings.alien_speed
+        self.rect.x = self.x
