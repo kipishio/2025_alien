@@ -37,7 +37,7 @@ class Alien(Sprite):
         """Перемещает пришельца влево или вправо."""
 
         self.x += (self.settings.alien_speed * self.settings.fleet_direction)
-        self.rect.x = self.x
+        self.rect.x = int(self.x)
 
     def check_edges(self):
         """Возвращает True, если пришелец находится у края экрана."""
