@@ -9,7 +9,7 @@ class Settings:
         self.screen_height = 800
         self.bg_color = (230, 230, 230)
         self.ship_speed = 1.5
-        self.ship_limit = 3
+        self.ship_limit = 2
 
         # Параметры снаряда
         self.bullet_speed = 3
